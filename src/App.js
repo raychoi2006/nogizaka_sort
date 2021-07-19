@@ -8,11 +8,12 @@ class App extends Component {
     super(props);
     this.state = {
         size:0,
-        items:[],
-        current:{},
+        items:[{item:0,equals:[]}],
+        current:{item:1,try:0,min:0,max:1},
         c:0,
         q:{},
-        printresult:false
+        printresult:false,
+        loading:true
     };
     this.getNextQuestion = this.getNextQuestion.bind(this);
   }
@@ -27,12 +28,15 @@ class App extends Component {
        // var fruit = ["orange", "apple", "pear", "banana", "kiwifruit", "grapefruit", "peach", "cherry", "starfruit", "strawberry"];
 // var t = new PrefList(10), c = 0, q;
 // while (q = t.getQuestion()) {
-  console.log(member)
-  console.log(member.length)
-    this.PrefList(member.length)
+    this.setState({
+      size: member.length
+  })
+    var newq = this.getQuestion()
+    console.log(newq)
     this.setState({
         member: member,
-        q: this.getQuestion()
+        q: newq,
+        loading: false
     })
   }
 
@@ -67,16 +71,10 @@ class App extends Component {
     console.log(index)
   }
 
-  PrefList(n) {
-    this.setState({
-        size: n,
-        items: [{item:0,equals:[]}],
-        current: {item:1,try:0,min:0,max:1}
-    })
     //this.size = n;
     //this.items = [{item: 0, equals: []}];
     //this.current = {item: 1, try: 0, min: 0, max: 1};
-  }
+  
 
   addAnswer(x, y, pref) {
   if (pref == 0) {
@@ -117,17 +115,18 @@ class App extends Component {
   }
 
   getQuestion() {
-    if (this.state.current.item >= this.state.size) return null;
+    if (this.state.current.item >= member.length) return null;
     //this.current.try = Math.floor((this.current.min + this.current.max) / 2);
+    var newtry = Math.floor((this.state.current.min + this.state.current.max) / 2)
     this.setState(prevState=>({
         current:{
             ...prevState.current,
-            try: Math.floor((this.state.current.min + this.state.current.max) / 2)
+            try: newtry
         } 
      }))
     console.log(this.state.items)
     console.log(this.state.current)
-    return({a: this.state.current.item, b: this.state.items[this.state.current.try].item});
+    return({a: this.state.current.item, b: this.state.items[newtry].item});
   }
 
   getOrder() {
@@ -147,8 +146,9 @@ class App extends Component {
   
   return (
     <div className="App">
-    {/* {this.state.printresult?(false):
-      <table>
+    {this.state.loading?(false):this.state.printresult?(false):
+      <table className="centertable">
+        <tbody>
           <tr>
               <td>
                 <img src={this.state.member[this.state.q.a].link} onClick={()=>this.getNextQuestion(-1)}/>
@@ -166,10 +166,13 @@ class App extends Component {
             </td>
           </tr>
           <tr>
-              <button onclick={this.getNextQuestion(0)}>No preference</button>
+            <td colSpan="2">
+              <button onClick={()=>this.getNextQuestion(0)}>No preference</button>
+              </td>
           </tr>
+          </tbody>
       </table>
-    } */}
+    }
     </div>
   );
 }
