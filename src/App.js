@@ -1,119 +1,104 @@
 import React, { Component, useState } from 'react'
-import logo from './logo.svg';
 import './App.css';
 import member from './member';
 
 class App extends Component {
-  constructor(props) {
+  constructor(props){
     super(props);
     this.state = {
-       memberList:[],
-       x:0,
-       y:1,
-       leftmember:{},
-       rightmember:{},
-       loading:true,
-       printresult:false,
-       sortedList:[],
-       totals: 0,
-       count:0
+      printresult:false,
+      sortedList:[],
+      leftimg:[],
+      rightimg:[],
+      leftname:[],
+      rightname:[],
+      draw:[],
     };
   }
 
   componentDidMount() {
-    this.initialize()
+    this.bottomUpMergeSort(member);
   }
 
-  initialize() {
-    var x = member.map((item,key)=>{
-      return {name:item.name,link:item.link,score:0}
-    })
-    var totalQ = this.findNumOfQuestion(x.length)
-    console.log(totalQ)
-    this.setState({
-      memberList: x,
-      leftmember: x[this.state.x],
-      rightmember: x[this.state.y],
-      totals: totalQ,
-      loading:false
-    })
-  }
-
-  findNumOfQuestion(z) {
-    const newz = z-1
-    if(newz > 0)
-      return newz + this.findNumOfQuestion(newz)
-    else
-      return 0
-  }
-
-  getNextQuestion(choice) {
-    if(choice == 'one') {
-     // $scope.foodArray[x].score++;
-      var updatemList = [...this.state.memberList];
-      updatemList[this.state.x].score = updatemList[this.state.x].score+1;
-      this.setState({
-        memberList: updatemList
-      })
-    } else if(choice == 'two') {
-       // $scope.foodArray[y].score++; 
-       var updatemList = [...this.state.memberList];
-      updatemList[this.state.y].score = updatemList[this.state.y].score+1;
-      this.setState({
-        memberList: updatemList
-      })               
+  async bottomUpMergeSort(items) {
+    var array = [];
+    
+    if ( items ) {
+      array = items.map(function(item) { return item; });
     }
-    if(this.state.y < this.state.memberList.length -1) {
-        //y++;
-        //$scope.foodTwo = $scope.foodArray[y];
-        var nexty = this.state.y +1;
-        var nextcount = this.state.count +1;
-        this.setState({
-          count: nextcount,
-          y: nexty,
-          rightmember: this.state.memberList[nexty]
-        })
-    } else if(this.state.x < this.state.memberList.length -2) {
-        //x++;
-        //y = 1 + x;
-        //$scope.foodOne = $scope.foodArray[x];
-        //$scope.foodTwo = $scope.foodArray[y];
-        var nextx = this.state.x +1;
-        var nexty = nextx +1;
-        var nextcount = this.state.count +1;
-        this.setState({
-          count: nextcount,
-          x: nextx,
-          y: nexty,
-          leftmember: this.state.memberList[nextx],
-          rightmember: this.state.memberList[nexty]
-        })
-    } else {
-        this.sortResult();   
-    }
-  }
-
-  sortResult() {
-    //$scope.foodArray.sort(function(a,b) {
-      //return b.score - a.score;  
-    //});
-    //$scope.finished = true;
-    var sortedList = this.state.memberList.sort(function(a,b) {
-      return b.score - a.score;  
-    })
-    console.log(sortedList)
+    
+    await this.bottomUpSort(array, array.length);
+    var finalSorted = array.reverse()
+    
     this.setState({
-      sortedList: sortedList,
-      printresult:true
+      sortedList: finalSorted,
+      printresult: true
     })
-  }  
- 
-  render() {
-
+  }
   
-  return (
-    <div className="App">
-    {this.state.loading?(false):this.state.printresult?
+  async bottomUpSort(items, n) {
+    var width,i;
+    
+    for ( width = 1; width < n; width = width * 2 ) {
+      for ( i = 0; i < n; i = i + 2 * width ) {
+        await this.bottomUpMerge(items, i, Math.min(i + width, n), Math.min(i + 2 * width, n));
+      }
+    }
+  }
+  
+  async bottomUpMerge(items, left, right, end) {
+    var n = left,
+        m = right,
+        currentSort = [],
+        j;
+    
+    for ( j = left; j < end; j++ ) {
+        //setstate and info, await here
+      
+      if ( n < right) {
+       if(items[m]!==undefined){
+        var savedChoice;
+        var choicePromise = new Promise(function(resolve, reject) {
+            savedChoice = resolve;
+          });
+          const leftimg = (<img className="photo" src={items[n].link} onClick={()=>savedChoice('left')}/>);
+          const rightimg = (<img className="photo" src={items[m].link} onClick={()=>savedChoice('right')}/>);
+          const leftname = (<p>{items[n].name}</p>);
+          const rightname = (<p>{items[m].name}</p>);
+          const draw = (<button onClick={()=>{savedChoice('draw')}}>No Preference</button>);
+          this.setState({
+            leftimg: leftimg,
+            rightimg: rightimg,
+            leftname: leftname,
+            rightname: rightname,
+            draw: draw,
+          })
+        }
+          if ( m >= end || (await choicePromise =='right'||items[m]==undefined) ){
+            //push left
+            currentSort.push(items[n]);
+            n++;
+          } else {
+              //push right
+            currentSort.push(items[m]);
+            m++;
+          }
+        
+    }
+      else {
+          //push right
+        currentSort.push(items[m]);
+        m++;
+      }
+    }
+    //make changes to final
+    currentSort.map(function(item,i) { items[left + i] = item; });
+  }
+
+  render() {
+    return(
+      <div className="App">
+         {this.state.printresult?
       <table className="centertable">
         <tbody>
           <tr>
@@ -135,28 +120,167 @@ class App extends Component {
       <table className="centertable">
         <tbody>
           <tr>
-            <td>Progress:</td>
-            <td>{Math.floor((this.state.counts/this.state.totals))}%</td>
-          </tr>
-          <tr>
               <td>
-                <img src={this.state.leftmember.link} onClick={()=>this.getNextQuestion('one')}/>
+                {this.state.leftimg}
               </td>
               <td>
-                <img src={this.state.rightmember.link} onClick={()=>this.getNextQuestion('two')}/>
+                {this.state.rightimg}
               </td>
           </tr>
           <tr>
             <td>
-              <p>{this.state.leftmember.name}</p>
+              {this.state.leftname}
             </td>
             <td>
-              <p>{this.state.rightmember.name}</p>
+              {this.state.rightname}
             </td>
           </tr>
           <tr>
             <td colSpan="2">
-              <button onClick={()=>this.getNextQuestion('nopref')}>No preference</button>
+              {this.state.draw}
+              </td>
+          </tr>
+          </tbody>
+      </table>
+    }
+      </div>
+    );
+  }
+}
+
+class recursionMergeSort extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+       printresult:false,
+       sortedList:[],
+       leftimg:[],
+       rightimg:[],
+       leftname:[],
+       rightname:[],
+       draw:[],
+       questions:[]
+    };
+  }
+
+  componentDidMount() {
+    this.mergeSort(member)
+  }
+
+  mergeSort (arr) {
+    if (arr.length === 1) {
+      // return once we hit an array with a single item
+      return arr
+    }
+
+    let self = this;
+  
+    const middle = Math.floor(arr.length / 2) // get the middle item of the array rounded down
+    const left = arr.slice(0, middle) // items on the left side
+    const right = arr.slice(middle) // items on the right side
+  
+    return Promise.all([self.mergeSort(left), self.mergeSort(right)]
+    ).catch(function(err){throw err;}).then(function (values) {return self.merge(values[0], values[1])});
+  }
+
+  async merge (left, right) {
+    let result = []
+    let indexLeft = 0
+    let indexRight = 0
+    console.log(left)
+    console.log(right)
+  
+    while (indexLeft < left.length && indexRight < right.length) {
+      var savedChoice;
+      var choicePromise = new Promise(function(resolve, reject) {
+        savedChoice = resolve;
+      });
+      const leftimg = (<img className="photo" src={left[indexLeft].link} onClick={()=>savedChoice('left')}/>);
+      const rightimg = (<img className="photo" src={right[indexRight].link} onClick={()=>savedChoice('right')}/>);
+      const leftname = (<p>{left[indexLeft].name}</p>);
+      const rightname = (<p>{right[indexRight].name}</p>);
+      const draw = (<button onClick={()=>{savedChoice('draw')}}>No Preference</button>);
+      this.setState(prevState=>({
+        leftimg: leftimg,
+        rightimg: rightimg,
+        leftname: leftname,
+        rightname: rightname,
+        draw: draw,
+        questions: [{leftimg:leftimg,rightimg:rightimg,leftname:leftname,rightname:rightname,draw:draw},...prevState.questions]
+      }))
+      
+        if (await choicePromise =='right') {
+          console.log('right')
+          result.push(left[indexLeft])
+          indexLeft = indexLeft + 1
+        } else {
+          console.log('left')
+          result.push(right[indexRight])
+          indexRight = indexRight + 1
+        }
+        if (this.state.questions.length>0) {
+          var questionsList = this.state.questions
+          var nextq = questionsList.pop()
+          this.setState({
+            leftimg:nextq.leftimg,
+            rightimg: nextq.rightimg,
+            leftname: nextq.leftname,
+            rightname: nextq.rightname,
+            draw: nextq.draw,
+            questions: questionsList
+          })
+        } 
+    }
+  
+    return result.concat(left.slice(indexLeft)).concat(right.slice(indexRight))
+  }
+
+ 
+  render() {
+
+  
+  return (
+    <div className="App">
+    {this.state.printresult?
+      <table className="centertable">
+        <tbody>
+          <tr>
+            <td colSpan="2">
+              Sorted Result
+            </td>
+          </tr>
+          {this.state.sortedList.map((item,key)=>{
+            return(
+              <tr>
+                <td>{key+1}.</td>
+                <td>{item.name}</td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    :
+      <table className="centertable">
+        <tbody>
+          <tr>
+              <td>
+                {this.state.leftimg}
+              </td>
+              <td>
+                {this.state.rightimg}
+              </td>
+          </tr>
+          <tr>
+            <td>
+              {this.state.leftname}
+            </td>
+            <td>
+              {this.state.rightname}
+            </td>
+          </tr>
+          <tr>
+            <td colSpan="2">
+              {this.state.draw}
               </td>
           </tr>
           </tbody>
@@ -166,6 +290,5 @@ class App extends Component {
   );
 }
 }
-
 
 export default App;
