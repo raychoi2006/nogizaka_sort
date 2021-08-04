@@ -13,6 +13,7 @@ class App extends Component {
       leftname:[],
       rightname:[],
       draw:[],
+      counter:1
     };
   }
 
@@ -78,6 +79,10 @@ class App extends Component {
             //push left
             currentSort.push(items[n]);
             n++;
+            if(items[m]!=undefined)
+              this.setState({
+                counter:this.state.counter+1
+              })
           } else {
               //push right
             currentSort.push(items[m]);
@@ -119,6 +124,9 @@ class App extends Component {
     :
       <table className="centertable">
         <tbody>
+          <tr>
+            <td colSpan="2">Progress: {this.state.counter}%</td>
+          </tr>
           <tr>
               <td>
                 {this.state.leftimg}
