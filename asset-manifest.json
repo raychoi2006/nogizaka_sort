@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/nogizaka_sort/static/css/main.d98edec0.chunk.css",
+    "main.js": "/nogizaka_sort/static/js/main.4ddd76cc.chunk.js",
+    "main.js.map": "/nogizaka_sort/static/js/main.4ddd76cc.chunk.js.map",
+    "runtime-main.js": "/nogizaka_sort/static/js/runtime-main.9e3ac32e.js",
+    "runtime-main.js.map": "/nogizaka_sort/static/js/runtime-main.9e3ac32e.js.map",
+    "static/js/2.26dcd3cb.chunk.js": "/nogizaka_sort/static/js/2.26dcd3cb.chunk.js",
+    "static/js/2.26dcd3cb.chunk.js.map": "/nogizaka_sort/static/js/2.26dcd3cb.chunk.js.map",
+    "static/js/3.9c3dabe3.chunk.js": "/nogizaka_sort/static/js/3.9c3dabe3.chunk.js",
+    "static/js/3.9c3dabe3.chunk.js.map": "/nogizaka_sort/static/js/3.9c3dabe3.chunk.js.map",
+    "index.html": "/nogizaka_sort/index.html",
+    "static/css/main.d98edec0.chunk.css.map": "/nogizaka_sort/static/css/main.d98edec0.chunk.css.map",
+    "static/js/2.26dcd3cb.chunk.js.LICENSE.txt": "/nogizaka_sort/static/js/2.26dcd3cb.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9e3ac32e.js",
+    "static/js/2.26dcd3cb.chunk.js",
+    "static/css/main.d98edec0.chunk.css",
+    "static/js/main.4ddd76cc.chunk.js"
+  ]
+}
