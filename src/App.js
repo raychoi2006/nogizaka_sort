@@ -1,7 +1,6 @@
 import React, { Component, useState } from 'react'
 import './App.css';
 import member from './member';
-import { Helmet } from 'react-helmet';
 
 class App extends Component {
   constructor(props) {
