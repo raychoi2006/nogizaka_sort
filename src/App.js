@@ -66,7 +66,7 @@ class App extends Component {
           const rightimg = (<img className="photo" src={items[m].link} onClick={()=>savedChoice('right')}/>);
           const leftname = (<p>{items[n].name}</p>);
           const rightname = (<p>{items[m].name}</p>);
-          const draw = (<button onClick={()=>{savedChoice('draw')}}>No Preference</button>);
+          const draw = (<button className="draw" onClick={()=>{savedChoice('draw')}}>No Preference</button>);
           this.setState({
             leftimg: leftimg,
             rightimg: rightimg,
@@ -104,7 +104,7 @@ class App extends Component {
     return(
       <div className="App">
          {this.state.printresult?
-      <table className="centertable">
+      <table className="result">
         <tbody>
           <tr>
             <td colSpan="2">
@@ -125,9 +125,6 @@ class App extends Component {
       <table className="centertable">
         <tbody>
           <tr>
-            <td colSpan="2">Progress: {this.state.counter}%</td>
-          </tr>
-          <tr>
               <td>
                 {this.state.leftimg}
               </td>
@@ -147,6 +144,9 @@ class App extends Component {
             <td colSpan="2">
               {this.state.draw}
               </td>
+          </tr>
+          <tr>
+            <td colSpan="2">Progress: {this.state.counter}%</td>
           </tr>
           </tbody>
       </table>
