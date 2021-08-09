@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/nogizaka_sort/static/css/main.5798d701.chunk.css",
-    "main.js": "/nogizaka_sort/static/js/main.e892f6c3.chunk.js",
-    "main.js.map": "/nogizaka_sort/static/js/main.e892f6c3.chunk.js.map",
+    "main.js": "/nogizaka_sort/static/js/main.2c82ccf5.chunk.js",
+    "main.js.map": "/nogizaka_sort/static/js/main.2c82ccf5.chunk.js.map",
     "runtime-main.js": "/nogizaka_sort/static/js/runtime-main.9e3ac32e.js",
     "runtime-main.js.map": "/nogizaka_sort/static/js/runtime-main.9e3ac32e.js.map",
     "static/js/2.26dcd3cb.chunk.js": "/nogizaka_sort/static/js/2.26dcd3cb.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.9e3ac32e.js",
     "static/js/2.26dcd3cb.chunk.js",
     "static/css/main.5798d701.chunk.css",
-    "static/js/main.e892f6c3.chunk.js"
+    "static/js/main.2c82ccf5.chunk.js"
   ]
 }
